@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Single Cell Analysis - SpaceX Style</title>
+  <link rel="icon" type="image/png" href="frontend/logo_mini.jpeg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #0a0a0a;
+      color: #fff;
+      font-family: 'Montserrat', Arial, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: url('frontend/Bioinfo.png') center/cover no-repeat;
+      filter: blur(2px) brightness(0.5);
+      z-index: 0;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 80px auto;
+      background: rgba(10,10,10,0.7);
+      border-radius: 24px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+      padding: 48px 32px;
+      backdrop-filter: blur(8px);
+    }
+    .footer {
+    position: relative; /* 保证在body流内 */
+    z-index: 5;         /* 明确高于背景 */
+    text-align: center;
+    color: #888;
+    margin-top: 48px;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    background: transparent;
+    }
+    h1 {
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+      font-weight: 700;
+      text-align: center;
+      text-shadow: 0 2px 16px #000;
+    }
+    label, input, textarea, button {
+      display: block;
+      width: 100%;
+      margin-bottom: 18px;
+      font-size: 1.1rem;
+    }
+    input, textarea {
+      background: rgba(30,30,30,0.8);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      padding: 12px;
+      margin-top: 6px;
+      outline: none;
+      box-shadow: 0 2px 8px #000a;
+    }
+    button {
+      background: linear-gradient(90deg, #222 60%, #444 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px #000a;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #444 60%, #222 100%);
+    }
+    .result-img {
+      display: block;
+      margin: 32px auto 0 auto;
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 32px #000a;
+      background: #111;
+    }
+    .footer {
+      text-align: center;
+      color: #888;
+      margin-top: 48px;
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Single Cell Analysis</h1>
+    <form id="analyze-form">
+      <label>
+        Uploading AnnData（.h5ad）:
+        <input type="file" id="file" name="file" accept=".h5ad" required>
+      </label>
+      <label>
+        Your Request:
+        <textarea id="user_request" name="user_request" rows="3" placeholder="eg:violin,UMAP etc." required></textarea>
+        
+      </label>
+      <button type="submit">Analyze</button>
+    </form>
+    <div id="result"></div>
+  </div>
+  <div class="footer">
+    Powered by Qwen-7B
+  </div>
+  <script>
+    document.getElementById('analyze-form').onsubmit = async function(e) {
+      e.preventDefault();
+      const fileInput = document.getElementById('file');
+      const userRequest = document.getElementById('user_request').value;
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      formData.append('user_request', userRequest);
+
+      document.getElementById('result').innerHTML = "Processing...";
+
+      const resp = await fetch('/analyze/', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await resp.json();
+      if (data.image_url) {
+        document.getElementById('result').innerHTML =
+          `<img class="result-img" src="${data.image_url}" alt="Results">`;
+      } else if (data.error) {
+        document.getElementById('result').innerHTML = `<span style="color:#f66;">${data.error}</span>`;
+      } else {
+        document.getElementById('result').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+      }
+    };
+  </script>
+ <!-- 只需替换 result.innerHTML 相关部分即可 -->
+<script>
+document.getElementById('analyze-form').onsubmit = async function(e) {
+  e.preventDefault();
+  const fileInput = document.getElementById('file');
+  const userRequest = document.getElementById('user_request').value;
+  const formData = new FormData();
+  formData.append('file', fileInput.files[0]);
+  formData.append('user_request', userRequest);
+
+  document.getElementById('result').innerHTML = "Processing...";
+
+  const resp = await fetch('/analyze/', {
+    method: 'POST',
+    body: formData
+  });
+  const data = await resp.json();
+  if (data.png_url) {
+    document.getElementById('result').innerHTML =
+      `<img class="result-img" src="${data.png_url}" alt="Result Image"><br>
+      <div style="margin-top:18px;">
+        <a href="${data.pdf_url}" download>Download PDF</a> |
+        <a href="${data.png_url}" download>Download PNG</a> |
+        <a href="${data.tiff_url}" download>Download TIFF</a>
+      </div>`;
+  } else if (data.error) {
+    document.getElementById('result').innerHTML = `<span style="color:#f66;">${data.error}</span>`;
+  } else {
+    document.getElementById('result').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+  }
+};
+</script>
+</body>
+</html>

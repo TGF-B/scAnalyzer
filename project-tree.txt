@@ -1,0 +1,15 @@
+scGPT2/
+├── backend/
+│   ├── app.py                  # FastAPI主程序（API入口，调用scanpy和LLM模块）
+│   ├── llm_utils.py            # LLM相关代码（如BioBERT/SciBERT加载与推理）
+│   ├── scanpy_utils.py         # Scanpy相关代码（单细胞分析流程）
+│   ├── requirements.txt        # 后端依赖
+│   └── ...（可扩展更多py文件）
+├── frontend/
+│   ├── src/
+│   │   ├── App.js              # React主页面
+│   │   ├── ...                 # 其他前端组件
+│   ├── public/
+│   │   └── index.html
+│   └── package.json            # 前端依赖
+├── README.md
