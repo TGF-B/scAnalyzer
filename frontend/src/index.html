@@ -105,7 +105,7 @@
     <h1>Single Cell Analysis</h1>
     <form id="analyze-form">
       <label>
-        Uploading AnnData（.h5ad）:
+        Upload AnnData（.h5ad）:
         <input type="file" id="file" name="file" accept=".h5ad" required>
       </label>
       <label>
@@ -136,33 +136,7 @@
         body: formData
       });
       const data = await resp.json();
-      if (data.image_url) {
-        document.getElementById('result').innerHTML =
-          `<img class="result-img" src="${data.image_url}" alt="Results">`;
-      } else if (data.error) {
-        document.getElementById('result').innerHTML = `<span style="color:#f66;">${data.error}</span>`;
-      } else {
-        document.getElementById('result').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-      }
-    };
-  </script>
- <!-- 只需替换 result.innerHTML 相关部分即可 -->
-<script>
-document.getElementById('analyze-form').onsubmit = async function(e) {
-  e.preventDefault();
-  const fileInput = document.getElementById('file');
-  const userRequest = document.getElementById('user_request').value;
-  const formData = new FormData();
-  formData.append('file', fileInput.files[0]);
-  formData.append('user_request', userRequest);
-
-  document.getElementById('result').innerHTML = "Processing...";
-
-  const resp = await fetch('/analyze/', {
-    method: 'POST',
-    body: formData
-  });
-  const data = await resp.json();
+     
   if (data.png_url) {
     document.getElementById('result').innerHTML =
       `<img class="result-img" src="${data.png_url}" alt="Result Image"><br>

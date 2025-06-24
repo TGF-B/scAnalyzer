@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.pyo
+*.h5ad
+static/
+*.png
+*.pdf
+*.tiff
+node_modules/
