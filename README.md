@@ -1,6 +1,6 @@
 # scAnalyzer
 
-A modern, SpaceX-style web application for single-cell data analysis powered by Qwen-7B.
+A  interaction-based single-cell data analysis powered by Qwen-7B.
 
 ![scAnalyzer](https://github.com/TGF-B/scAnalyzer/raw/main/Display.png)
 
