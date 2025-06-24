@@ -1,6 +1,6 @@
 # scAnalyzer
 
-A  interaction-based single-cell data analysis powered by Qwen-7B.
+An interaction-based single-cell data analysis tool powered by Qwen-7B.
 
 ![scAnalyzer](https://github.com/TGF-B/scAnalyzer/raw/main/demo_display.png)
 
