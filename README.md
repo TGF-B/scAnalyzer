@@ -2,8 +2,8 @@
 
 An interaction-based single-cell data analysis tool powered by Qwen-7B.
 
-![scAnalyzer](https://github.com/TGF-B/scAnalyzer/raw/main/demo_display.png)
-![scAnalyzer](https://github.com/TGF-B/scAnalyzer/raw/main/pDC.png)
+![scAnalyzer](https://github.com/TGF-B/scAnalyzer/raw/main/display_pDC.png)
+
 ## Features
 
 - **Upload AnnData (.h5ad) files** for analysis
