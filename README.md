@@ -1,7 +1,8 @@
 <img width="1433" alt="pDC_display" src="https://github.com/user-attachments/assets/dc200b79-a7fb-4e7e-b0b7-5bb69b090b51" /># scAnalyzer
 
 An interaction-based single-cell data analysis tool powered by Qwen-7B.
-![scAnalyzer](https://github.com/TGF-B/scAnalyzer/raw/main/pDC_display.png)
+
+![scAnalyzer](https://github.com/TGF-B/scAnalyzer/raw/main/pDC_display2.png)
 
 ## Features
 
