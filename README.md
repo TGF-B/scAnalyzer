@@ -2,7 +2,7 @@
 
 An interaction-based single-cell data analysis tool powered by Qwen-7B.
 
-![scAnalyzer](https://github.com/TGF-B/scAnalyzer/raw/main/display_pDC.png)
+![scAnalyzer](https://github.com/TGF-B/scAnalyzer/raw/main/pDC_display.png)
 
 ## Features
 
