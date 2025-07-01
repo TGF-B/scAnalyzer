@@ -135,6 +135,9 @@
         method: 'POST',
         body: formData
       });
+      if (!resp.ok) {
+        throw new Error(`Server error: ${resp.status} ${resp.statusText}`);
+      }
       const data = await resp.json();
      
   if (data.png_url) {
@@ -150,6 +153,7 @@
   } else {
     document.getElementById('result').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
   }
+  
 };
 </script>
 </body>

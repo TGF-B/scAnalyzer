@@ -42,15 +42,13 @@ async def hello_qwen():
 
 
 @app.post("/analyze/")
-async def analyze(
-    file: UploadFile = File(...),
-    user_request: str = Form(...)
-):
+async def analyze(file: UploadFile = File(...), user_request: str = Form(...)):
     tmp_path = None
     try:
-        # 保存临时文件
+        content = await file.read()
+        print("Received file size:", len(content), "bytes")
         with tempfile.NamedTemporaryFile(delete=False, suffix=".h5ad") as tmp:
-            tmp.write(await file.read())
+            tmp.write(content)
             tmp_path = tmp.name
 
         # 读取 AnnData
@@ -65,7 +63,8 @@ async def analyze(
         return result
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print("Error:", str(e))
+        return {"error": str(e)}
     finally:
         if tmp_path and os.path.exists(tmp_path):
             os.remove(tmp_path)

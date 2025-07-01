@@ -19,16 +19,34 @@ ANALYSIS_FUNCTIONS = {
 
 def get_prompt(user_request, adata=None):
     genes = list(adata.var_names[:10]) if adata is not None else []
-    groups = list(adata.obs.columns) if adata is not None else []
+    
+    # 直接使用固定的分组变量列表
+    allowed_groups = ["group", "celltype", "orig.ident"]
+    
     return (
-        f"你是一个单细胞分析助手。用户会用自然语言描述需求，请你只输出如下符合scanpy要求的JSON："
-        "无论什么情况，都必须输出如下格式的 JSON：{{\"function\": \"plot_violin/plot_qc/plot_umap/plot_dotplot/plot_pseudotime/check_adata_structure\", \"params\": {{参数字典}}}}\n"
-        f"可用基因: {genes}\n"
-        f"可用分组: {groups}\n"
-        "不要输出seurat_cluster, orig.ident,group这样属于seurat工具包的类，只输出符合seurat包要求的JSON。\n"
-        f"用户输入：{user_request}\n"
-        f"如果只输出参数字典会报错，必须包含 function 字段。"
-    )
+    f"你是单细胞分析助手。解析用户请求并输出JSON格式的命令。\n"
+    f"支持的功能有：\n"
+    f"1. plot_violin：绘制基因表达的小提琴图\n"
+    f"2. plot_umap：绘制UMAP降维可视化\n" 
+    f"3. plot_qc：绘制QC质量控制图\n"
+    f"4. check_adata_structure：检查数据结构\n"
+    f"5. plot_dotplot：绘制点图\n"
+    f"6. plot_pseudotime：绘制拟时序分析\n\n"
+    
+    f"重要！必须严格遵守以下分组规则，不允许任何例外：\n"
+    f"- 无论用户如何描述，只要是关于比较CP和Ctrl或任何分组比较的请求，都必须使用groupby=\"group\"\n"
+    f"- 当用户提到按照细胞类型绘图时，必须使用groupby=\"celltype\"\n"
+    f"- 当用户提到按照细胞簇绘图时，必须使用groupby=\"orig.ident\"\n"
+    f"- 永远不要使用nCount_RNA, nFeature_RNA等其他列名\n"
+    f"- 不要创建新的分组变量\n"
+    f"可用基因示例: {genes},不区分大小写，收到基因名后统一改成第一个字母大写\n"
+    f"唯一可用的分组变量: group, celltype, orig.ident\n"
+    f"用户输入：{user_request}\n\n"
+    
+    f"返回格式：\n"
+    f"{{\"function\": \"plot_violin\", \"params\": {{\"genes\": [\"基因1\", \"基因2\"], \"groupby\": \"分组变量\"}}}}\n"
+    f"或：{{\"function\": \"check_adata_structure\", \"params\": {{}}}}\n"
+)
 
 def extract_first_json_block(text):
     start = text.find('{')
